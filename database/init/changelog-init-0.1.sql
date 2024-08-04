@@ -1,18 +1,18 @@
--- changeset sebastian.granda:1
+--changeset sebastian.granda:1
 
--- comment: department foreign keys
+--comment: department foreign keys
 ALTER TABLE department
     ADD CONSTRAINT fk_department_created_by_task_id
     FOREIGN KEY (created_by_task_id)
     REFERENCES task(id);
 
--- comment: job foreign keys
+--comment: job foreign keys
 ALTER TABLE job
     ADD CONSTRAINT fk_job_created_by_task_id
     FOREIGN KEY (created_by_task_id)
     REFERENCES task(id);
 
--- comment: employee foreign keys
+--comment: employee foreign keys
 ALTER TABLE employee
     ADD CONSTRAINT fk_employee_department_id
     FOREIGN KEY (department_id)
@@ -28,7 +28,7 @@ ALTER TABLE employee
     FOREIGN KEY (created_by_task_id)
     REFERENCES task(id);
 
--- comment: task foreign keys
+--comment: task foreign keys
 ALTER TABLE task
     ADD CONSTRAINT fk_task_type_id
     FOREIGN KEY (type_id)
