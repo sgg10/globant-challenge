@@ -1,4 +1,7 @@
---changeset rollback:1 delete all records where changelog_id = -1 (rollback all operations from app)
+--liquibase formatted sql
+
+--changeset rollback:0
+--comment: Delete all records created by app (with changelog_id = -1)
 
 DELETE FROM department WHERE changelog_id = -1;
 DELETE FROM job WHERE changelog_id = -1;

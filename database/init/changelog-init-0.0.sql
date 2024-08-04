@@ -1,8 +1,9 @@
 --liquibase formatted sql
 
 --changeset sebastian.granda:1
+--comment: Create the initial tables for the database
 
---comment: CREATE TABLE department
+-- CREATE TABLE department
 CREATE TABLE IF NOT EXISTS department (
     id                  SERIAL NOT NULL,
     department          VARCHAR NOT NULL,
@@ -20,7 +21,7 @@ COMMENT ON COLUMN department.created_by_task_id IS 'ID of the task that created 
 COMMENT ON COLUMN department.created_at IS 'Timestamp when the record was created';
 COMMENT ON COLUMN department.updated_at IS 'Timestamp when the record was last updated';
 
---comment: CREATE TABLE job
+-- CREATE TABLE job
 CREATE TABLE IF NOT EXISTS job (
     id                  SERIAL NOT NULL,
     job                 VARCHAR NOT NULL,
@@ -38,7 +39,7 @@ COMMENT ON COLUMN job.created_by_task_id IS 'ID of the task that created this re
 COMMENT ON COLUMN job.created_at IS 'Timestamp when the record was created';
 COMMENT ON COLUMN job.updated_at IS 'Timestamp when the record was last updated';
 
---comment: CREATE TABLE employee
+-- CREATE TABLE employee
 CREATE TABLE employee (
     id                  SERIAL PRIMARY KEY,
     name                VARCHAR NOT NULL,
@@ -61,7 +62,7 @@ COMMENT ON COLUMN employee.created_by_task_id IS 'ID of the task that created th
 COMMENT ON COLUMN employee.created_at IS 'Timestamp when the record was created';
 COMMENT ON COLUMN employee.updated_at IS 'Timestamp when the record was last updated';
 
---comment: CREATE TABLE task_type
+-- CREATE TABLE task_type
 CREATE TABLE task_type (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR NOT NULL,
@@ -76,7 +77,7 @@ COMMENT ON COLUMN task_type.changelog_id IS 'Reference ID to track changes';
 COMMENT ON COLUMN task_type.created_at IS 'Timestamp when the record was created';
 COMMENT ON COLUMN task_type.updated_at IS 'Timestamp when the record was last updated';
 
---comment: CREATE TABLE task_status
+-- CREATE TABLE task_status
 CREATE TABLE task_status (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR NOT NULL,
@@ -91,7 +92,7 @@ COMMENT ON COLUMN task_status.changelog_id IS 'Reference ID to track changes';
 COMMENT ON COLUMN task_status.created_at IS 'Timestamp when the record was created';
 COMMENT ON COLUMN task_status.updated_at IS 'Timestamp when the record was last updated';
 
---comment: CREATE TABLE task
+-- CREATE TABLE task
 CREATE TABLE task (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR NOT NULL,
@@ -102,8 +103,6 @@ CREATE TABLE task (
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-
---Comments for `task` table and columns
 COMMENT ON TABLE task IS 'Stores information about the tasks created and managed within the system';
 COMMENT ON COLUMN task.id IS 'Unique identifier for each task, auto-incremented';
 COMMENT ON COLUMN task.name IS 'Name of the task';

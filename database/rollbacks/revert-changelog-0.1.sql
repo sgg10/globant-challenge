@@ -1,4 +1,7 @@
---changeset rollback:1 delete all records where changelog_id = 1
+--liquibase formatted sql
+
+--changeset rollback:0
+--comment: Delete the records created in the initial changelog, but keep the tables
 
 DELETE FROM department WHERE changelog_id = 1;
 DELETE FROM job WHERE changelog_id = 1;
