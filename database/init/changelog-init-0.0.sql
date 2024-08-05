@@ -41,7 +41,7 @@ COMMENT ON COLUMN job.updated_at IS 'Timestamp when the record was last updated'
 
 -- CREATE TABLE employee
 CREATE TABLE employee (
-    id                  SERIAL PRIMARY KEY,
+    id                  SERIAL NOT NULL,
     name                VARCHAR NOT NULL,
     datetime            TIMESTAMP NOT NULL,
     department_id       INT NOT NULL,
@@ -49,7 +49,8 @@ CREATE TABLE employee (
     changelog_id        INT NOT NULL DEFAULT -1,
     created_by_task_id  INT NOT NULL,
     created_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at          TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT          employee_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE employee IS 'Stores information about the employees within the organization';
 COMMENT ON COLUMN employee.id IS 'Unique identifier for each employee, auto-incremented';
@@ -64,11 +65,12 @@ COMMENT ON COLUMN employee.updated_at IS 'Timestamp when the record was last upd
 
 -- CREATE TABLE task_type
 CREATE TABLE task_type (
-    id              SERIAL PRIMARY KEY,
+    id              SERIAL NOT NULL,
     name            VARCHAR NOT NULL,
     changelog_id    INT NOT NULL DEFAULT -1,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT      task_type_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE task_type IS 'Stores the different types of tasks that can be created and managed within the system';
 COMMENT ON COLUMN task_type.id IS 'Unique identifier for each task type, auto-incremented';
@@ -79,11 +81,12 @@ COMMENT ON COLUMN task_type.updated_at IS 'Timestamp when the record was last up
 
 -- CREATE TABLE task_status
 CREATE TABLE task_status (
-    id              SERIAL PRIMARY KEY,
+    id              SERIAL NOT NULL,
     name            VARCHAR NOT NULL,
     changelog_id    INT NOT NULL DEFAULT -1,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT      task_status_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE task_status IS 'Stores the different statuses that tasks can have';
 COMMENT ON COLUMN task_status.id IS 'Unique identifier for each task status, auto-incremented';
@@ -94,14 +97,17 @@ COMMENT ON COLUMN task_status.updated_at IS 'Timestamp when the record was last 
 
 -- CREATE TABLE task
 CREATE TABLE task (
-    id              SERIAL PRIMARY KEY,
+    id              SERIAL NOT NULL,
     name            VARCHAR NOT NULL,
     type_id         INT NOT NULL,
     status_id       INT NOT NULL,
     config          JSONB NOT NULL DEFAULT '{}',
+    start_at        TIMESTAMP NOT NULL,
+    end_at          TIMESTAMP,
     changelog_id    INT NOT NULL DEFAULT -1,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    updated_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT      task_pk PRIMARY KEY (id)
 );
 COMMENT ON TABLE task IS 'Stores information about the tasks created and managed within the system';
 COMMENT ON COLUMN task.id IS 'Unique identifier for each task, auto-incremented';
@@ -109,6 +115,8 @@ COMMENT ON COLUMN task.name IS 'Name of the task';
 COMMENT ON COLUMN task.type_id IS 'Foreign key referencing the type of the task';
 COMMENT ON COLUMN task.status_id IS 'Foreign key referencing the status of the task';
 COMMENT ON COLUMN task.config IS 'Configuration details for the task stored as JSONB';
+COMMENT ON COLUMN task.start_at IS 'Timestamp when the task is scheduled to start';
+COMMENT ON COLUMN task.end_at IS 'Timestamp when the task is scheduled to end';
 COMMENT ON COLUMN task.changelog_id IS 'Reference ID to track changes';
 COMMENT ON COLUMN task.created_at IS 'Timestamp when the record was created';
 COMMENT ON COLUMN task.updated_at IS 'Timestamp when the record was last updated';

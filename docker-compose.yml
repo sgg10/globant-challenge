@@ -23,6 +23,21 @@ services:
     networks:
       - challenge
 
+  migration:
+    build:
+      context: ./migration-pipeline/
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - liquibase
+    environment:
+      POSTGRES_DB: #!{DATABASE_NAME}!#
+      POSTGRES_USER: #!{DATABASE_USER}!#
+      POSTGRES_PASSWORD: #!{DATABASE_PASSWORD}!#
+      POSTGRES_HOST: db
+    networks:
+      - challenge
+
 networks:
   challenge:
     driver: bridge
