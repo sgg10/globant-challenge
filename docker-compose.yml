@@ -38,6 +38,28 @@ services:
     networks:
       - challenge
 
+  api:
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    image: globant-challenge-api-#!{ENVIRONMENT}!#
+    volumes:
+      - ./api:/code:z
+    command: /start
+    depends_on:
+      - db
+    environment:
+      ENVIRONMENT: #!{ENVIRONMENT}!#
+      DB_NAME: #!{DATABASE_NAME}!#
+      DB_USER: #!{DATABASE_USER}!#
+      DB_PASSWORD: #!{DATABASE_PASSWORD}!#
+      DB_HOST: #!{DATABASE_HOST}!#
+    ports:
+      - "#!{API_PORT}!#:#!{API_PORT}!#"
+    networks:
+      - challenge
+
+
 networks:
   challenge:
     driver: bridge
