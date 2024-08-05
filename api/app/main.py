@@ -1,27 +1,29 @@
-from typing import Union
-
 from fastapi import FastAPI
-import pkg_resources
+from fastapi.middleware.cors import CORSMiddleware
 
+from app.core.settings import APISettings
 from app.database.check_health import check_database_health
+from app.api.challenge_1.router import router as challenge_1_router
 
 
-app = FastAPI()
+app = FastAPI(
+    title=APISettings.API_NAME,
+    version=APISettings.VERSION,
+    redoc_url=f"{APISettings.PREFIX}/redoc",
+    openapi_url=f"{APISettings.PREFIX}/docs",
+    swagger_ui_oauth2_redirect_url=f"{APISettings.PREFIX}/docs/oauth2-redirect",
+)
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=APISettings.ORIGINS,
+    # allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/")
-def root():
-    return {"Hello": "World"}
-
-
-@app.get("/packages")
-def get_packages():
-    packages = []
-    for package in pkg_resources.working_set:
-        packages.append(
-            {"package_name": package.project_name, "version": package.version}
-        )
-    return packages
+app.include_router(challenge_1_router, prefix=APISettings.PREFIX)
 
 
 @app.get("/health")

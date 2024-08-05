@@ -9,7 +9,7 @@ class ErrorModel(BaseModel):
     status: Optional[str | int] = Field(default="error")
     message: str = Field(...)
     error_type: str = Field(...)
-    details: Optional[Dict[str, Any]] = Field(None)
+    details: Optional[str | Dict[str, Any]] = Field(None)
 
     class Config:
         extra = "ignore"

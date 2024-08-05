@@ -3,7 +3,7 @@ from typing import Dict, List
 
 
 class APISettings:
-    PREFIX: str = "/"
+    PREFIX: str = ""
     API_NAME: str = os.environ.get("API_NAME", "Globant-Challaenge-API")
     VERSION: str = os.environ.get("VERSION", "v0.1.0")
 
