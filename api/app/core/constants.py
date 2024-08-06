@@ -24,6 +24,9 @@ KAFKA_TOPIC: str = os.getenv("KAFKA_TOPIC", "globant-challenge")
 DATABASE_CHECK_HEALTH_QUERY: str = "SELECT 1"
 KAFKA_CHECK_HEALTH_SUCCESS: str = f"Topic '{KAFKA_TOPIC}' exists."
 
+GENERAL_TASKS_ENDPOINT: str = "/task/{task_id}"
+GENERAL_TASKS_ENDPOINT_SUMMARY: str = "Get Task Information"
+
 CHALLENGE_1_PREFIX: str = "challenge-1"
 
 CHALLENGE_1_UPLOAD_ENDPOINT: str = ""
@@ -94,6 +97,7 @@ class ResponseErrorTypeEnum(str, Enum):
     NO_DATA_PROVIDED: str = "NO_DATA_PROVIDED"
     DATA_SIZE_LIMIT_EXCEEDED: str = "DATA_SIZE_LIMIT_EXCEEDED"
     REPORT_NOT_FOUND: str = "REPORT_NOT_FOUND"
+    TASK_NOT_FOUND: str = "TASK_NOT_FOUND"
 
 
 class ResponseErrorMessage(str, Enum):
@@ -101,6 +105,7 @@ class ResponseErrorMessage(str, Enum):
     NO_DATA_PROVIDED: str = "No data provided"
     DATA_SIZE_LIMIT_EXCEEDED: str = "The data size limit is 1000 records per request"
     REPORT_NOT_FOUND: str = "The specified report does not exist"
+    TASK_NOT_FOUND: str = "The specified task does not exist"
 
 
 # Error messages
