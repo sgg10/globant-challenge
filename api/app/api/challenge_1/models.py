@@ -131,39 +131,3 @@ class UploadDataModel(BaseModel):
                 ],
             }
         }
-
-
-class KafkaTaskMessageModel(BaseModel):
-    """
-    Model representing a Kafka task message.
-
-    Attributes:
-        task_id (int): The ID of the task.
-        task (TASK_TYPE): The type of the task.
-        data (Optional[UploadDataModel]): Optional data associated with the task.
-    """
-
-    task_id: int = Field(...)
-    task: TASK_TYPE = Field(...)
-    data: Optional[UploadDataModel] = Field(None)
-
-
-class TaskResponseModel(BaseModel):
-    """
-    Represents the response model for a task.
-
-    Attributes:
-        message (str): The message of the response.
-        task_id (int): The ID of the task.
-    """
-
-    message: str = Field(...)
-    task_id: int = Field(...)
-
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "message": NEW_TASK_SUCCESS_MESSAGE(1234, "<TASK_NAME>"),
-                "task_id": 1234,
-            }
-        }

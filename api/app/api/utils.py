@@ -20,8 +20,8 @@ from app.database.models import (
     TaskType,
     TaskStatus,
 )
-from app.api.challenge_1.models import (
-    UploadDataModel,
+from app.api.challenge_1.models import UploadDataModel
+from app.api.models import (
     KafkaTaskMessageModel,
     TaskResponseModel,
 )

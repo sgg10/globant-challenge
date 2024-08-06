@@ -2,8 +2,9 @@ from fastapi import Body, status, APIRouter, HTTPException
 
 from app.core import constants
 from app.api.models import ErrorModel
-from app.api.challenge_1.utils import manage_new_task
-from app.api.challenge_1.models import TaskResponseModel, UploadDataModel
+from app.api.utils import manage_new_task
+from app.api.models import TaskResponseModel
+from app.api.challenge_1.models import UploadDataModel
 
 
 router = APIRouter(

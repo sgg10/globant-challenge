@@ -45,6 +45,11 @@ NEW_TASK_SUCCESS_MESSAGE: Callable[[int, str], str] = (
     lambda id, name: f"'{name}' task created with id '{id}'. Use this id to check the task status"
 )
 
+CHALLENGE_2_PREFIX: str = "challenge-2"
+CHALLENGE_2_REPORT_ENDPOINT: str = "/report/{type}"
+CHALLENGE_2_REPORT_ENDPOINT_SUMMARY: str = "Request a report from the database"
+
+
 # Enums and Types
 
 
@@ -52,9 +57,12 @@ class TaskTypeEnum(str, Enum):
     LOAD = "LOAD"
     BACKUP = "BACKUP"
     RESTORE = "RESTORE"
+    REPORT = "REPORT"
 
 
-TASK_TYPE = Literal[TaskTypeEnum.LOAD, TaskTypeEnum.BACKUP, TaskTypeEnum.RESTORE]
+TASK_TYPE = Literal[
+    TaskTypeEnum.LOAD, TaskTypeEnum.BACKUP, TaskTypeEnum.RESTORE, TaskTypeEnum.REPORT
+]
 
 
 class TaskStatusEnum(str, Enum):
@@ -64,16 +72,26 @@ class TaskStatusEnum(str, Enum):
     FAILED = "FAILED"
 
 
+class ReportTypeEnum(str, Enum):
+    TYPE1 = "type1"
+    TYPE2 = "type2"
+
+
+ReportType = Literal[ReportTypeEnum.TYPE1, ReportTypeEnum.TYPE2]
+
+
 class ResponseErrorTypeEnum(str, Enum):
     HTTP_500: str = "INTERNAL_SERVER_ERROR"
     NO_DATA_PROVIDED: str = "NO_DATA_PROVIDED"
     DATA_SIZE_LIMIT_EXCEEDED: str = "DATA_SIZE_LIMIT_EXCEEDED"
+    REPORT_NOT_FOUND: str = "REPORT_NOT_FOUND"
 
 
 class ResponseErrorMessage(str, Enum):
     HTTP_500: str = "Internal Server Error"
     NO_DATA_PROVIDED: str = "No data provided"
     DATA_SIZE_LIMIT_EXCEEDED: str = "The data size limit is 1000 records per request"
+    REPORT_NOT_FOUND: str = "The specified report does not exist"
 
 
 # Error messages
