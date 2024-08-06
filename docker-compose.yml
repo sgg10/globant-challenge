@@ -86,6 +86,28 @@ services:
     networks:
       - challenge
 
+  worker:
+    build:
+      context: ./worker/
+      dockerfile: Dockerfile
+    image: globant-challenge-worker-#!{ENVIRONMENT}!#
+    container_name: worker
+    depends_on:
+      - db
+      - kafka
+    networks:
+      - challenge
+    environment:
+      WORKERS: 2
+      ENVIRONMENT: #!{ENVIRONMENT}!#
+      DB_NAME: #!{DATABASE_NAME}!#
+      DB_USER: #!{DATABASE_USER}!#
+      DB_PASSWORD: #!{DATABASE_PASSWORD}!#
+      DB_HOST: #!{DATABASE_HOST}!#
+      AWS_ACCESS_KEY_ID: #!{AWS_ACCESS_KEY_ID}!#
+      AWS_SECRET_ACCESS_KEY: #!{AWS_SECRET_ACCESS_KEY}!#
+      KAFKA_HOST: #!{KAFKA_HOST}!#
+
 networks:
   challenge:
     driver: bridge

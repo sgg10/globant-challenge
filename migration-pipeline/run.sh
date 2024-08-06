@@ -11,7 +11,7 @@ table_exists() {
 # Wait for the database to be ready
 until pg_isready -h $POSTGRES_HOST -p 5432; do
     echo "Waiting for the database to be ready..."
-    sleep 5
+    sleep 60
 done
 
 # Validate if the specified tables exist
