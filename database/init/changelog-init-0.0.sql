@@ -102,7 +102,7 @@ CREATE TABLE task (
     type_id         INT NOT NULL,
     status_id       INT NOT NULL,
     config          JSONB NOT NULL DEFAULT '{}',
-    start_at        TIMESTAMP NOT NULL,
+    start_at        TIMESTAMP,
     end_at          TIMESTAMP,
     changelog_id    INT NOT NULL DEFAULT -1,
     created_at      TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

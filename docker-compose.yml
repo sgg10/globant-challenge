@@ -23,6 +23,32 @@ services:
     networks:
       - challenge
 
+  zookeeper:
+    build:
+      context: ./kafka/
+      dockerfile: Dockerfile.zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - challenge
+    mem_limit: '1g'
+
+  kafka:
+    build:
+      context: ./kafka/
+      dockerfile: Dockerfile.kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+      - "29092:29092"
+    networks:
+      - challenge
+    mem_limit: '1g'
+
   migration:
     build:
       context: ./migration-pipeline/
@@ -35,6 +61,28 @@ services:
       POSTGRES_USER: #!{DATABASE_USER}!#
       POSTGRES_PASSWORD: #!{DATABASE_PASSWORD}!#
       POSTGRES_HOST: db
+    networks:
+      - challenge
+
+  api:
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    image: globant-challenge-api-#!{ENVIRONMENT}!#
+    volumes:
+      - ./api:/code:z
+    command: /start
+    depends_on:
+      - db
+      - kafka
+    environment:
+      ENVIRONMENT: #!{ENVIRONMENT}!#
+      DB_NAME: #!{DATABASE_NAME}!#
+      DB_USER: #!{DATABASE_USER}!#
+      DB_PASSWORD: #!{DATABASE_PASSWORD}!#
+      DB_HOST: #!{DATABASE_HOST}!#
+    ports:
+      - "#!{API_PORT}!#:#!{API_PORT}!#"
     networks:
       - challenge
 
