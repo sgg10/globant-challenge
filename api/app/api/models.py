@@ -2,9 +2,9 @@ from typing import Any, Dict, Optional
 
 from pydantic import Field, BaseModel
 
-from app.api.challenge_1.models import UploadDataModel
 from app.api.challenge_2.models import ReportTypeModel
 from app.core.constants import NEW_TASK_SUCCESS_MESSAGE, TASK_TYPE
+from app.api.challenge_1.models import UploadDataModel, TableNameModel
 
 
 class ErrorModel(BaseModel):
@@ -47,7 +47,7 @@ class KafkaTaskMessageModel(BaseModel):
 
     task_id: int = Field(...)
     task: TASK_TYPE = Field(...)
-    data: Optional[UploadDataModel | ReportTypeModel] = Field(None)
+    data: Optional[UploadDataModel | TableNameModel | ReportTypeModel] = Field(None)
 
 
 class TaskResponseModel(BaseModel):

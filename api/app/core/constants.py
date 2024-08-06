@@ -80,6 +80,15 @@ class ReportTypeEnum(str, Enum):
 ReportType = Literal[ReportTypeEnum.TYPE1, ReportTypeEnum.TYPE2]
 
 
+class TableEnum(str, Enum):
+    DEPARTMENT = "department"
+    JOB = "job"
+    EMPLOYEE = "employee"
+
+
+TableType = Literal[TableEnum.DEPARTMENT, TableEnum.JOB, TableEnum.EMPLOYEE]
+
+
 class ResponseErrorTypeEnum(str, Enum):
     HTTP_500: str = "INTERNAL_SERVER_ERROR"
     NO_DATA_PROVIDED: str = "NO_DATA_PROVIDED"

@@ -4,7 +4,7 @@ from app.core import constants
 from app.api.models import ErrorModel
 from app.api.utils import manage_new_task
 from app.api.models import TaskResponseModel
-from app.api.challenge_1.models import UploadDataModel
+from app.api.challenge_1.models import UploadDataModel, TableNameModel
 
 
 router = APIRouter(
@@ -65,18 +65,18 @@ def upload_data(body: UploadDataModel = Body(...)):
     summary=constants.CHALLENGE_1_BACKUP_ENDPOINT_SUMMARY,
     response_model=TaskResponseModel,
 )
-def backup_task():
+def backup_task(body: TableNameModel = Body(...)):
     """
     # Backup a task.
 
-    This endpoint is used to backup database.
+    This endpoint is used to backup table.
     It creates a new task of type `BACKUP` and returns the task response model.
 
     ## Returns:
         TaskResponseModel: The response model containing the details of the new task.
 
     """
-    return manage_new_task(constants.TaskTypeEnum.BACKUP.value)
+    return manage_new_task(constants.TaskTypeEnum.BACKUP.value, data=body)
 
 
 @router.post(
@@ -85,14 +85,14 @@ def backup_task():
     summary=constants.CHALLENGE_1_RESTORE_ENDPOINT_SUMMARY,
     response_model=TaskResponseModel,
 )
-def restore_task():
+def restore_task(body: TableNameModel = Body(...)):
     """
     # Restore a task.
 
-    This endpoint is used to restore data from last backup.
+    This endpoint is used to restore data from last table backup.
     It creates a new task of type `RESTORE` and returns the task response model.
 
     ## Returns:
         TaskResponseModel: The response model containing the restored task.
     """
-    return manage_new_task(constants.TaskTypeEnum.RESTORE.value)
+    return manage_new_task(constants.TaskTypeEnum.RESTORE.value, data=body)

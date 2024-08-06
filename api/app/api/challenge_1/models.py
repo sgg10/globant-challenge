@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, Field
 
-from app.core.constants import NEW_TASK_SUCCESS_MESSAGE, TASK_TYPE
+from app.core.constants import TableType
 
 
 class DepartmentModel(BaseModel):
@@ -129,5 +129,23 @@ class UploadDataModel(BaseModel):
                         "job_id": 1234,
                     }
                 ],
+            }
+        }
+
+
+class TableNameModel(BaseModel):
+    """
+    Represents a table name model.
+
+    Attributes:
+        table_name (str): The name of the table.
+    """
+
+    table_name: TableType = Field(...)
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "table_name": "departments",
             }
         }
