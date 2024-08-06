@@ -1,21 +1,30 @@
 import os
 from typing import Dict, List
 
+from app.core import constants
+
 
 class APISettings:
-    PREFIX: str = ""
-    API_NAME: str = os.environ.get("API_NAME", "Globant-Challaenge-API")
-    VERSION: str = os.environ.get("VERSION", "v0.1.0")
+    PREFIX: str = constants.API_PREFIX
+    API_NAME: str = constants.API_NAME
+    VERSION: str = constants.API_VERSION
 
-    ORIGINS: List[str] = os.environ.get("ORIGINS", "*").split(",")
+    ORIGINS: List[str] = constants.API_ORIGINS.split(",")
 
-    ENVIRONMENT = os.environ.get("ENVIRONMENT", "local")
+    ENVIRONMENT = constants.API_ENVIRONMENT
 
     # Database settings
     DATABASE: Dict[str, str | int] = {
-        "HOST": os.environ.get("DB_HOST", "db"),
-        "PORT": os.environ.get("DB_PORT", 5432),
-        "USER": os.environ.get("DB_USER", "postgres"),
-        "PASSWORD": os.environ.get("DB_PASSWORD", "postgres"),
-        "NAME": os.environ.get("DB_NAME", "mydb"),
+        "HOST": constants.DB_HOST,
+        "PORT": constants.DB_PORT,
+        "USER": constants.DB_USER,
+        "PASSWORD": constants.DB_PASS,
+        "NAME": constants.DB_NAME,
+    }
+
+    # Kafka settings
+    KAFKA: Dict[str, str | int] = {
+        "HOST": constants.KAFKA_HOST,
+        "PORT": constants.KAFKA_PORT,
+        "TOPIC": constants.KAFKA_TOPIC,
     }

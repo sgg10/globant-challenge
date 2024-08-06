@@ -1,15 +1,21 @@
 from fastapi import Body, status, APIRouter, HTTPException
 
+from app.core import constants
 from app.api.models import ErrorModel
-from app.api.challenge_1.models import UploadDataModel
+from app.api.challenge_1.utils import manage_new_task
+from app.api.challenge_1.models import TaskResponseModel, UploadDataModel
 
-router = APIRouter(prefix="/challenge_1", tags=["challenge_1"])
+
+router = APIRouter(
+    prefix=f"/{constants.CHALLENGE_1_PREFIX}", tags=[constants.CHALLENGE_1_PREFIX]
+)
 
 
 @router.post(
-    path="",
+    path=constants.CHALLENGE_1_UPLOAD_ENDPOINT,
     status_code=status.HTTP_201_CREATED,
-    summary="Upload data for departments, jobs, or employees",
+    summary=constants.CHALLENGE_1_UPLOAD_ENDPOINT_SUMMARY,
+    response_model=TaskResponseModel,
 )
 def upload_data(body: UploadDataModel = Body(...)):
     if not body.has_data:
@@ -17,9 +23,9 @@ def upload_data(body: UploadDataModel = Body(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=ErrorModel(
                 code=status.HTTP_400_BAD_REQUEST,
-                message="Bad Request",
-                error_type="NO_DATA_PROVIDED",
-                details="No data provided",
+                message=constants.ResponseErrorMessage.NO_DATA_PROVIDED,
+                error_type=constants.ResponseErrorTypeEnum.NO_DATA_PROVIDED,
+                details=constants.ResponseErrorMessage.NO_DATA_PROVIDED,
             ).model_dump(),
         )
 
@@ -28,40 +34,30 @@ def upload_data(body: UploadDataModel = Body(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=ErrorModel(
                 code=status.HTTP_400_BAD_REQUEST,
-                message="Data size limit exceeded",
-                error_type="DATA_SIZE_LIMIT_EXCEEDED",
-                details="The data size limit is 1000 records per entity",
+                message=constants.ResponseErrorMessage.DATA_SIZE_LIMIT_EXCEEDED,
+                error_type=constants.ResponseErrorTypeEnum.DATA_SIZE_LIMIT_EXCEEDED,
+                details=constants.ResponseErrorMessage.DATA_SIZE_LIMIT_EXCEEDED,
             ).model_dump(),
         )
 
-    try:
-        return {"message": "Data uploaded successfully", "data": body}
-    except Exception as e:
-
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=ErrorModel(
-                code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                error_type="INTERNAL_SERVER_ERROR",
-                message="Internal server error",
-                details=str(e),
-            ).model_dump(),
-        )
+    return manage_new_task(constants.TaskTypeEnum.LOAD.value, data=body)
 
 
 @router.post(
-    path="/backup",
+    path=constants.CHALLENGE_1_BACKUP_ENDPOINT,
     status_code=status.HTTP_201_CREATED,
-    summary="Backup data for departments, jobs, or employees",
+    summary=constants.CHALLENGE_1_BACKUP_ENDPOINT_SUMMARY,
+    response_model=TaskResponseModel,
 )
-def backup_task(body=Body(...)):
-    return {"message": "Data backup successfully", "data": body}
+def backup_task():
+    return manage_new_task(constants.TaskTypeEnum.BACKUP.value)
 
 
 @router.post(
-    path="/restore",
+    path=constants.CHALLENGE_1_RESTORE_ENDPOINT,
     status_code=status.HTTP_201_CREATED,
-    summary="Restore data for departments, jobs, or employees",
+    summary=constants.CHALLENGE_1_RESTORE_ENDPOINT_SUMMARY,
+    response_model=TaskResponseModel,
 )
-def restore_task(body=Body(...)):
-    return {"message": "Data restore successfully", "data": body}
+def restore_task():
+    return manage_new_task(constants.TaskTypeEnum.RESTORE.value)

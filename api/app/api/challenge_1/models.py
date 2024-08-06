@@ -1,5 +1,8 @@
 from typing import List, Optional
-from pydantic import BaseModel, Field, ValidationError
+
+from pydantic import BaseModel, Field
+
+from app.core.constants import NEW_TASK_SUCCESS_MESSAGE, TASK_TYPE
 
 
 class DepartmentModel(BaseModel):
@@ -86,5 +89,24 @@ class UploadDataModel(BaseModel):
                         "job_id": 1234,
                     }
                 ],
+            }
+        }
+
+
+class KafkaTaskMessageModel(BaseModel):
+    task_id: int = Field(...)
+    task: TASK_TYPE = Field(...)
+    data: Optional[UploadDataModel] = Field(None)
+
+
+class TaskResponseModel(BaseModel):
+    message: str = Field(...)
+    task_id: int = Field(...)
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "message": NEW_TASK_SUCCESS_MESSAGE(1234, "<TASK_NAME>"),
+                "task_id": 1234,
             }
         }

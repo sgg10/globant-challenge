@@ -1,5 +1,7 @@
 from sqlalchemy import text
+
 from app.database.connection import create_session
+from app.core.constants import DATABASE_CHECK_HEALTH_ERROR, DATABASE_CHECK_HEALTH_QUERY
 
 
 def check_database_health():
@@ -14,11 +16,10 @@ def check_database_health():
         engine, session = create_session()
 
         with engine.connect() as connection:
-            _ = connection.execute(text("SELECT 1"))
+            _ = connection.execute(text(DATABASE_CHECK_HEALTH_QUERY))
 
         session.close()
         return True, ""
     except Exception as e:
-        message = f"Error checking database health: {e}"
-        print(message)
+        message = f"{DATABASE_CHECK_HEALTH_ERROR}: {e}"
         return False, message

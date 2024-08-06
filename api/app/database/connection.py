@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.core.settings import APISettings
+from app.core.constants import DATABASE_CONNECTION_ERROR
 
 
 def create_session():
@@ -23,5 +24,5 @@ def create_session():
         Session = sessionmaker(bind=engine)
         return engine, Session()
     except Exception as e:
-        print(f"Error connecting to database: {e}")
+        print(f"{DATABASE_CONNECTION_ERROR}: {e}")
         return None, None
