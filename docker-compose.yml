@@ -23,6 +23,32 @@ services:
     networks:
       - challenge
 
+  zookeeper:
+    build:
+      context: ./kafka/
+      dockerfile: Dockerfile.zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - challenge
+    mem_limit: '1g'
+
+  kafka:
+    build:
+      context: ./kafka/
+      dockerfile: Dockerfile.kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+      - "29092:29092"
+    networks:
+      - challenge
+    mem_limit: '1g'
+
   migration:
     build:
       context: ./migration-pipeline/
@@ -48,6 +74,7 @@ services:
     command: /start
     depends_on:
       - db
+      - kafka
     environment:
       ENVIRONMENT: #!{ENVIRONMENT}!#
       DB_NAME: #!{DATABASE_NAME}!#
@@ -58,7 +85,6 @@ services:
       - "#!{API_PORT}!#:#!{API_PORT}!#"
     networks:
       - challenge
-
 
 networks:
   challenge:
