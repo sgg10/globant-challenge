@@ -28,6 +28,25 @@ from app.api.challenge_1.models import (
 
 
 def create_task(task_type: TASK_TYPE):
+    """
+    Create a new task with the given task type.
+
+    Args:
+        task_type (TASK_TYPE): The type of the task.
+
+    Returns:
+        tuple: A tuple containing the task information and an error message (if any).
+            The task information is a dictionary with the following keys:
+                - id (int): The ID of the task.
+                - name (str): The name of the task.
+
+            If an error occurs during the task creation, the tuple will contain None
+            for the task information and the error message as a string.
+
+    Raises:
+        Exception: If any error occurs during the task creation.
+
+    """
     try:
         engine, session = create_session()
 
@@ -63,6 +82,18 @@ def send_message(
     task: TASK_TYPE,
     data: Optional[UploadDataModel] = None,
 ):
+    """
+    Sends a message to Kafka.
+
+    Args:
+        task_id (int): The ID of the task.
+        task (TASK_TYPE): The type of the task.
+        data (Optional[UploadDataModel], optional): The data to be sent. Defaults to None.
+
+    Returns:
+        Tuple[bool, Optional[str]]: A tuple containing a boolean indicating if the message was sent successfully
+        and an optional error message if an exception occurred.
+    """
     try:
         message = KafkaTaskMessageModel(task_id=task_id, task=task, data=data)
 
@@ -82,6 +113,19 @@ def send_message(
 
 
 def manage_new_task(task_type: TASK_TYPE, data=None):
+    """
+    Manages a new task by creating a task of the specified type and sending a message.
+
+    Args:
+        task_type (TASK_TYPE): The type of the task.
+        data (Any, optional): Additional data for the task. Defaults to None.
+
+    Returns:
+        TaskResponseModel: The response model containing the message and task ID.
+
+    Raises:
+        HTTPException: If an error occurs during task creation or message sending.
+    """
     try:
         task, error = create_task(task_type)
 

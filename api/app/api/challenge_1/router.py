@@ -18,6 +18,21 @@ router = APIRouter(
     response_model=TaskResponseModel,
 )
 def upload_data(body: UploadDataModel = Body(...)):
+    """
+    # Upload Data
+
+    This endpoint is used to upload data to the database.
+    It creates a new task of type `LOAD` and returns the task response model.
+
+    ## Parameters:
+        body (UploadDataModel): The data to be uploaded.
+
+    ## Raises:
+        HTTPException: If the request body does not have data or exceeds the data size limit.
+
+    ## Returns:
+        TaskResponseModel: The response containing the newly created task.
+    """
     if not body.has_data:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -50,6 +65,16 @@ def upload_data(body: UploadDataModel = Body(...)):
     response_model=TaskResponseModel,
 )
 def backup_task():
+    """
+    # Backup a task.
+
+    This endpoint is used to backup database.
+    It creates a new task of type `BACKUP` and returns the task response model.
+
+    ## Returns:
+        TaskResponseModel: The response model containing the details of the new task.
+
+    """
     return manage_new_task(constants.TaskTypeEnum.BACKUP.value)
 
 
@@ -60,4 +85,13 @@ def backup_task():
     response_model=TaskResponseModel,
 )
 def restore_task():
+    """
+    # Restore a task.
+
+    This endpoint is used to restore data from last backup.
+    It creates a new task of type `RESTORE` and returns the task response model.
+
+    ## Returns:
+        TaskResponseModel: The response model containing the restored task.
+    """
     return manage_new_task(constants.TaskTypeEnum.RESTORE.value)

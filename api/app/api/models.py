@@ -4,7 +4,15 @@ from pydantic import Field, BaseModel
 
 
 class ErrorModel(BaseModel):
-    """Error Model for API responses."""
+    """
+    Error Model for API responses.
+
+    Attributes:
+        status (Optional[str | int]): The status of the error response. Defaults to "error".
+        message (str): The error message.
+        error_type (str): The type of error.
+        details (Optional[str | Dict[str, Any]]): Additional details about the error. Defaults to None.
+    """
 
     status: Optional[str | int] = Field(default="error")
     message: str = Field(...)

@@ -6,6 +6,14 @@ from app.core.constants import NEW_TASK_SUCCESS_MESSAGE, TASK_TYPE
 
 
 class DepartmentModel(BaseModel):
+    """
+    Represents a department model.
+
+    Attributes:
+        id (Optional[int]): The ID of the department.
+        department (str): The name of the department.
+    """
+
     id: Optional[int] = Field(None)
     department: str = Field(...)
 
@@ -19,6 +27,14 @@ class DepartmentModel(BaseModel):
 
 
 class JobModel(BaseModel):
+    """
+    Represents a job model.
+
+    Attributes:
+        id (Optional[int]): The ID of the job model.
+        job (str): The job title.
+    """
+
     id: Optional[int] = Field(None)
     job: str = Field(...)
 
@@ -32,6 +48,17 @@ class JobModel(BaseModel):
 
 
 class EmployeeModel(BaseModel):
+    """
+    Represents an employee.
+
+    Attributes:
+        id (Optional[int]): The ID of the employee.
+        datetime (str): The date and time of the employee.
+        name (str): The name of the employee.
+        department_id (int): The ID of the department the employee belongs to.
+        job_id (int): The ID of the job the employee has.
+    """
+
     id: Optional[int] = Field(None)
     datetime: str = Field(..., format="date-time")
     name: str = Field(
@@ -53,6 +80,19 @@ class EmployeeModel(BaseModel):
 
 
 class UploadDataModel(BaseModel):
+    """
+    Model representing uploaded data.
+
+    Attributes:
+        departments (List[DepartmentModel]): List of department models.
+        jobs (List[JobModel]): List of job models.
+        employees (List[EmployeeModel]): List of employee models.
+
+    Properties:
+        has_data (bool): Indicates if the model has any data.
+        complies_data_size_limit (bool): Indicates if the model complies with the data size limit.
+    """
+
     departments: List[DepartmentModel] = Field(default_factory=list)
     jobs: List[JobModel] = Field(default_factory=list)
     employees: List[EmployeeModel] = Field(default_factory=list)
@@ -94,12 +134,29 @@ class UploadDataModel(BaseModel):
 
 
 class KafkaTaskMessageModel(BaseModel):
+    """
+    Model representing a Kafka task message.
+
+    Attributes:
+        task_id (int): The ID of the task.
+        task (TASK_TYPE): The type of the task.
+        data (Optional[UploadDataModel]): Optional data associated with the task.
+    """
+
     task_id: int = Field(...)
     task: TASK_TYPE = Field(...)
     data: Optional[UploadDataModel] = Field(None)
 
 
 class TaskResponseModel(BaseModel):
+    """
+    Represents the response model for a task.
+
+    Attributes:
+        message (str): The message of the response.
+        task_id (int): The ID of the task.
+    """
+
     message: str = Field(...)
     task_id: int = Field(...)
 

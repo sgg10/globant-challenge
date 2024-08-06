@@ -17,7 +17,6 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=APISettings.ORIGINS,
-    # allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,6 +27,14 @@ app.include_router(challenge_1_router, prefix=APISettings.PREFIX)
 
 @app.get("/health")
 def health():
+    """
+    # Health
+
+    Endpoint for checking the health status of the API.
+
+    ## Returns:
+        dict: A dictionary containing the health status of the database, Kafka, and the general status of the API.
+    """
     database_health, database_message = check_database_health()
     kafka_health, kafka_message = check_kafka_health()
     return {
