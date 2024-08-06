@@ -1,6 +1,8 @@
 import os
 import json
+
 from confluent_kafka import Consumer, KafkaException, KafkaError
+import constants
 
 
 def create_consumer():
@@ -14,14 +16,13 @@ def create_consumer():
 
     consumer = Consumer(
         {
-            # "bootstrap.servers": os.getenv("KAFKA_HOST", "localhost:9092"),
-            "bootstrap.servers": "localhost:9092",
-            "group.id": os.getenv("KAFKA_GROUP_ID", "kafka-group"),
+            "bootstrap.servers": constants.KAFKA_HOST + ":" + constants.KAFKA_PORT,
+            "group.id": constants.KAFKA_GROUP_ID,
             "auto.offset.reset": "earliest",
         }
     )
 
-    consumer.subscribe([os.getenv("KAFKA_TOPIC", "globant-challenge")])
+    consumer.subscribe([constants.KAFKA_TOPIC])
 
     return consumer
 

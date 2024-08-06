@@ -110,7 +110,11 @@ def get_task(task_id: int = Path(...)):
         )
 
         if task_info["status"] == constants.TaskStatusEnum.COMPLETED:
-            task_info["result"] = json.loads(task_info["config"]).get("result", None)
+            task_info["result"] = (
+                json.loads(task_info["config"]).get("result", None)
+                if type(task_info["config"]) == str
+                else task_info["config"].get("result", None)
+            )
 
         del task_info["config"]
 
