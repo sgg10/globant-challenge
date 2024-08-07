@@ -1,0 +1,113 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: "#!{DATABASE_USER}!#"
+      POSTGRES_PASSWORD: "#!{DATABASE_PASSWORD}!#"
+      POSTGRES_DB: "#!{DATABASE_NAME}!#"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    networks:
+      - challenge
+
+  liquibase:
+    build:
+      context: ./database/
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    networks:
+      - challenge
+
+  zookeeper:
+    build:
+      context: ./kafka/
+      dockerfile: Dockerfile.zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - challenge
+    mem_limit: '1g'
+
+  kafka:
+    build:
+      context: ./kafka/
+      dockerfile: Dockerfile.kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9101:9101"
+      - "29092:29092"
+    networks:
+      - challenge
+    mem_limit: '1g'
+
+  migration:
+    build:
+      context: ./migration-pipeline/
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+      - liquibase
+    environment:
+      POSTGRES_DB: #!{DATABASE_NAME}!#
+      POSTGRES_USER: #!{DATABASE_USER}!#
+      POSTGRES_PASSWORD: #!{DATABASE_PASSWORD}!#
+      POSTGRES_HOST: db
+    networks:
+      - challenge
+
+  api:
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    image: globant-challenge-api-#!{ENVIRONMENT}!#
+    volumes:
+      - ./api:/code:z
+    command: /start
+    depends_on:
+      - db
+      - kafka
+    environment:
+      ENVIRONMENT: #!{ENVIRONMENT}!#
+      DB_NAME: #!{DATABASE_NAME}!#
+      DB_USER: #!{DATABASE_USER}!#
+      DB_PASSWORD: #!{DATABASE_PASSWORD}!#
+      DB_HOST: #!{DATABASE_HOST}!#
+    ports:
+      - "#!{API_PORT}!#:#!{API_PORT}!#"
+    networks:
+      - challenge
+
+  worker:
+    build:
+      context: ./worker/
+      dockerfile: Dockerfile
+    image: globant-challenge-worker-#!{ENVIRONMENT}!#
+    container_name: worker
+    depends_on:
+      - db
+      - kafka
+    networks:
+      - challenge
+    environment:
+      WORKERS: 2
+      ENVIRONMENT: #!{ENVIRONMENT}!#
+      DB_NAME: #!{DATABASE_NAME}!#
+      DB_USER: #!{DATABASE_USER}!#
+      DB_PASSWORD: #!{DATABASE_PASSWORD}!#
+      DB_HOST: #!{DATABASE_HOST}!#
+      AWS_ACCESS_KEY_ID: #!{AWS_ACCESS_KEY_ID}!#
+      AWS_SECRET_ACCESS_KEY: #!{AWS_SECRET_ACCESS_KEY}!#
+      KAFKA_HOST: #!{KAFKA_HOST}!#
+
+networks:
+  challenge:
+    driver: bridge

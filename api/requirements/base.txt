@@ -1,0 +1,9 @@
+pydantic==2.8.2
+psycopg2-binary==2.9.9
+confluent-kafka[avro]==2.5.0
+pytest==8.3.2
+flake8==7.1.1
+fastapi[standard]==0.112.0
+fastapi-cli[standard]==0.0.5
+starlette==0.37.2
+sqlalchemy==2.0.31
